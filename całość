@@ -1,0 +1,30 @@
+#importowanie i inicjowanie pygame
+import pygame
+pygame.init()
+from pygame.locals import (K_UP, K_DOWN, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT,) #przyciski
+
+#tworzenie okna gry
+screen_width = 600
+screen_height = 600
+screen = pygame.display.set_mode([screen_width,screen_height])
+
+#Nazwa gry i ikonka
+pygame.display.set_caption("Welcome to the jungle")
+icon = pygame.image.load("jungle.png") #ikona z flaticon.com, Freepik!
+pygame.display.set_icon(icon)
+
+#trwanie gry - dopóki gracz jej nie wyłączy
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE: #wyjście z gry przyciskiem escape
+                running = False
+            elif event.type == QUIT: #wyjście z gry iksem
+                running = False
+#wszystko musi być w pętli!
+#zielone tło
+    screen.fill((127, 255, 0))
+
+    pygame.display.flip() #koniec pętli
+pygame.quit()
