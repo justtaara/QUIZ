@@ -1,0 +1,22 @@
+class Postac:
+    wartosc_kaloryczna = 10
+
+class Miesozerca(Postac):
+    koszt_energetyczny = 2
+
+    def __init__(self, pkt_zycia, pkt_walki):
+        self.pkt_zycia = pkt_zycia
+        self.pkt_walki = pkt_walki
+
+    def zuzyj_energie(self):
+        "Zużyj energię potrzebną na turę życia"
+        self.pkt_zycia -= self.koszt_energetyczny
+        self.pkt_zycia = max(self.pkt_zycia, 0)
+
+    def zjedz(self, zwierze):
+        "Zjedz roslinozerce lub miesozerce"
+        self.pkt_zycia += zwierze.wartosc_kaloryczna
+
+
+class Gracz(Miesozerca):
+    pass
