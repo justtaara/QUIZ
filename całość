@@ -1,6 +1,6 @@
 #importowanie i inicjowanie pygame
 import pygame
-from pygame.locals import (K_UP, K_DOWN, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT,) #przyciski
+from pygame.locals import (KEYUP, K_DOWN, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT,) #przyciski
 pygame.init()
 
 #tworzenie okna gry
@@ -13,18 +13,68 @@ pygame.display.set_caption("Welcome to the jungle")
 icon = pygame.image.load("jungle.png") #ikona z flaticon.com, Freepik!
 pygame.display.set_icon(icon)
 
+#Grafika - tu wrzucajcie ikonki itp
+playerPng = pygame.image.load('lion.png') #ikona z flaticon.com, Freepik!
+
+#######GRACZ####### - na razie bez klasy
+#gracz - położenie
+player_X = 300
+player_Y = 300
+#zmienne początkowe do ruchu
+player_mov_X = 0
+player_mov_Y = 0
+#rysowanie gracza
+def player_appear():
+    screen.blit(playerPng,(int(player_X), int(player_Y)))
+    player_box = pygame.Rect(int(player_X+3), int(player_Y), 35, 40)
+    return player_box
+
 #trwanie gry - dopóki gracz jej nie wyłączy
 running = True
 while running:
     for event in pygame.event.get():
+        if event.type == pygame.QUIT: #wyjście z gry iksem
+            running = False
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE: #wyjście z gry przyciskiem escape
                 running = False
-            elif event.type == QUIT: #wyjście z gry iksem
-                running = False
+#działanie strzałek lub awsd - przyciskanie: (ruch gracza)
+            if event.key == pygame.K_LEFT or event.key == ord('a'):
+                player_mov_X = -0.2
+            if event.key == pygame.K_RIGHT or event.key == ord('d'):
+                player_mov_X = 0.2
+            if event.key == pygame.K_UP or event.key == ord('w'):
+                player_mov_Y = -0.2
+            if event.key == pygame.K_DOWN or event.key == ord('s'):
+                player_mov_Y = 0.2
+#działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
+        if event.type == KEYUP:
+            if event.key == pygame.K_LEFT or event.key == ord('a'):
+                player_mov_X = 0
+            if event.key == pygame.K_RIGHT or event.key == ord('d'):
+                player_mov_X = 0
+            if event.key == pygame.K_UP or event.key == ord('w'):
+                player_mov_Y = 0
+            if event.key == pygame.K_DOWN or event.key == ord('s'):
+                player_mov_Y = 0
+#gracz nie wchodzi w ściany
+    if player_Y <= 0:
+        player_Y = 0
+    if player_Y >=575:
+        player_Y = 575
+    if player_X <= 0:
+        player_X = 0
+    if player_X >= 575:
+        player_X = 575
 #wszystko musi być w pętli!
 #zielone tło
     screen.fill((127, 255, 0))
-
-    pygame.display.flip() #koniec pętli
+#aktualizacja ruchu gracza - początkowa pozycja + zmiana
+    player_X += player_mov_X
+    player_Y += player_mov_Y
+#pojawienie się gracza na planszy
+    player_appear()
+    
+#koniec pętli
+    pygame.display.flip()
 pygame.quit()
