@@ -5,6 +5,9 @@ pygame.init()
 import time, datetime
 from tkinter import *
 from random import randint
+
+from animals import Carnivore
+
 #tworzenie okna gry
 screen_width = 600
 screen_height = 600
@@ -39,7 +42,7 @@ def player_appear():
     screen.blit(playerPng,(int(player_X), int(player_Y)))
     player_box = pygame.Rect(int(player_X), int(player_Y), 35, 40)
     return player_box
-#######ROŚLINOŻERCA####### 
+#######ROŚLINOŻERCA#######
 class Herbivore():
     def __init__(self):
         self.x = randint(0,500)
@@ -51,6 +54,12 @@ class Herbivore():
         herbivorePng = pygame.image.load('monkey.png')
         screen.blit(herbivorePng,(self.x, self.y))
 herbivore = Herbivore()
+
+NUM_CARNIVORE = 4
+carnivores = []
+for i in range(NUM_CARNIVORE):
+    carnivores.append(Carnivore())
+
 #trwanie gry - dopóki gracz jej nie wyłączy, wszystko musi być w pętli!
 running = True
 while running:
@@ -123,6 +132,11 @@ while running:
     player_appear()
 #roslinozerca wywolany (na razie 1, pracuję nad tym)
     herbivore.appear()
+
+    for carnivore in carnivores:
+        carnivore.move()
+        carnivore.appear(screen)
+
 #koniec pętli
     pygame.display.flip()
 pygame.quit()
