@@ -4,7 +4,7 @@ from pygame.locals import (KEYUP, K_DOWN, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT,) #pr
 pygame.init()
 import time, datetime
 from tkinter import *
-
+from random import time
 #tworzenie okna gry
 screen_width = 600
 screen_height = 600
