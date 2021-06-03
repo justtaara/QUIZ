@@ -1,4 +1,5 @@
 import random
+import pygame
 
 BOARD_SIZE = 575
 
@@ -12,8 +13,8 @@ class Animal:
         self.x = x
         self.y = y
 
-    def appear(self):
-        animal_icon = pygame.image.load(animal_image)
+    def appear(self, screen):
+        animal_icon = pygame.image.load(self.animal_image)
         screen.blit(animal_icon, (self.x, self.y))
 
     # Randomly move the animal
