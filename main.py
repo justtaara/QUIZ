@@ -39,7 +39,18 @@ def player_appear():
     screen.blit(playerPng,(int(player_X), int(player_Y)))
     player_box = pygame.Rect(int(player_X), int(player_Y), 35, 40)
     return player_box
-
+#######ROŚLINOŻERCA####### 
+class Herbivore():
+    def __init__(self):
+        self.x = randint(0,500)
+        self.y = randint(0,500)
+        self.HP = 90 #startowy poziom
+        self.mov_X = 0.15
+        self.mov_Y = 0.15
+    def appear(self):
+        herbivorePng = pygame.image.load('monkey.png')
+        screen.blit(herbivorePng,(self.x, self.y))
+herbivore = Herbivore()
 #trwanie gry - dopóki gracz jej nie wyłączy, wszystko musi być w pętli!
 running = True
 while running:
@@ -96,8 +107,22 @@ while running:
 #aktualizacja ruchu gracza - początkowa pozycja + zmiana
     player_X += player_mov_X
     player_Y += player_mov_Y
+#roślinozerca nie wyjdzie poza ramę + odbije się, jeśli w nią wpadnie
+    if herbivore.y <= 0:
+        herbivore.mov_Y = 0.15
+    if herbivore.y >= 575:
+        herbivore.mov_Y = -0.15
+    if herbivore.x <= 0:
+        herbivore.mov_X= 0.15
+    if herbivore.x >= 575:
+        herbivore.mov_X = -0.15
+    #zmiana położenia roślinożercy
+    herbivore.x += herbivore.mov_X
+    herbivore.y += herbivore.mov_Y
 #pojawienie się gracza na planszy
     player_appear()
+#roslinozerca wywolany (na razie 1, pracuję nad tym)
+    herbivore.appear()
 #koniec pętli
     pygame.display.flip()
 pygame.quit()
