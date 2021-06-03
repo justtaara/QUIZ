@@ -5,7 +5,7 @@ pygame.init()
 import time, datetime
 from tkinter import *
 from random import randint
-
+from random import random
 from animals import Carnivore
 
 #tworzenie okna gry
@@ -53,7 +53,10 @@ class Herbivore():
     def appear(self):
         herbivorePng = pygame.image.load('monkey.png')
         screen.blit(herbivorePng,(self.x, self.y))
-herbivore = Herbivore()
+herbivores = []
+number_of_herbivores = 10
+for i in range(number_of_herbivores):
+    herbivores.append(Herbivore())
 
 NUM_CARNIVORE = 4
 carnivores = []
@@ -116,22 +119,24 @@ while running:
 #aktualizacja ruchu gracza - początkowa pozycja + zmiana
     player_X += player_mov_X
     player_Y += player_mov_Y
+#roslinozercy sie pojawiaja 
+  for herbivore in herbivores:
+        herbivore.appear()
 #roślinozerca nie wyjdzie poza ramę + odbije się, jeśli w nią wpadnie
-    if herbivore.y <= 0:
-        herbivore.mov_Y = 0.15
-    if herbivore.y >= 575:
-        herbivore.mov_Y = -0.15
-    if herbivore.x <= 0:
-        herbivore.mov_X= 0.15
-    if herbivore.x >= 575:
-        herbivore.mov_X = -0.15
-    #zmiana położenia roślinożercy
-    herbivore.x += herbivore.mov_X
-    herbivore.y += herbivore.mov_Y
+        if herbivore.y <= 0:
+            herbivore.mov_Y = random()
+        if herbivore.y >= 575:
+            herbivore.mov_Y = -(random())
+        if herbivore.x <= 0:
+            herbivore.mov_X= random()
+        if herbivore.x >= 575:
+            herbivore.mov_X = -(random())
+        #zmiana położenia roślinożercy
+        herbivore.x += herbivore.mov_X
+        herbivore.y += herbivore.mov_Y
 #pojawienie się gracza na planszy
     player_appear()
-#roslinozerca wywolany (na razie 1, pracuję nad tym)
-    herbivore.appear()
+
 
     for carnivore in carnivores:
         carnivore.move()
