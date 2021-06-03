@@ -40,7 +40,11 @@ class Carnivore(Animal):
     animal_image = 'lion.png'
     energy_cost = 2
 
-    def __init__(self, x, y, attack_strength=10, hp=100):
+    def __init__(self, x=None, y=None, attack_strength=10, hp=100):
+        if x is None:
+            x = random.randint(0, BOARD_SIZE)
+        if y is None:
+            y = random.randint(0, BOARD_SIZE)
         super().__init__(x, y)
         self.hp = hp
         self.attack_strength = attack_strength
@@ -57,3 +61,4 @@ class Carnivore(Animal):
 
 class Player(Carnivore):
     pass
+
