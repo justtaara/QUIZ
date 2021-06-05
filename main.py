@@ -53,19 +53,19 @@ class Herbivore():
     def appear(self):
         herbivorePng = pygame.image.load('monkey.png')
         screen.blit(herbivorePng,(self.x, self.y))
-    def move(self):
+   def move(self):
         #roślinozerca nie wyjdzie poza ramę + odbije się, jeśli w nią wpadnie
-        if herbivore.y <= 0:
-            herbivore.mov_Y = random()
-        if herbivore.y >= 575:
-            herbivore.mov_Y = -(random())
-        if herbivore.x <= 0:
-            herbivore.mov_X= random()
-        if herbivore.x >= 575:
-            herbivore.mov_X = -(random())
+        if self.y <= 0:
+            self.mov_Y = random()
+        if self.y >= 575:
+            self.mov_Y = -(random())
+        if self.x <= 0:
+            self.mov_X= random()
+        if self.x >= 575:
+            self.mov_X = -(random())
         #zmiana położenia roślinożercy
-        herbivore.x += herbivore.mov_X
-        herbivore.y += herbivore.mov_Y
+        self.x += self.mov_X
+        self.y += self.mov_Y
 herbivores = []
 number_of_herbivores = 10
 for i in range(number_of_herbivores):
