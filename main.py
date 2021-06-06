@@ -42,6 +42,13 @@ def player_appear():
     screen.blit(playerPng,(int(player_X), int(player_Y)))
     player_box = pygame.Rect(int(player_X), int(player_Y), 35, 40)
     return player_box
+##SPRAWDZANIE, CZY NASTĄPIŁA DETEKCJA OBIEKTU###
+def is_detected(width1, height1, width2, height2):
+    if width1 >= width2 and width1 <= width2 + 32: #32x32 wymiar ikonki
+        if height1 >= height2 and height1 >= height2 + 32:
+            return True
+    else:
+        False
 #######ROŚLINOŻERCA#######
 class Herbivore():
     def __init__(self):
@@ -153,8 +160,8 @@ while running:
     for fruit in fruits:
         fruit.appear()
     for fruit in fruits[:]: 
-        if is_detected(herbivore.x, herbivore.y, fruit.x, fruit.y):
-            fruits.remove(fruit) #owoc znika z planszy po zjedzeniu
+        if is_detected(herbivore.x, herbivore.y, fruit.x, fruit.y) == True:
+            fruits.remove(fruit) #owoc znika z planszy po "zjedzeniu"
 
 #pojawienie się gracza na planszy
     player_appear()
