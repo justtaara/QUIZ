@@ -4,8 +4,7 @@ from pygame.locals import (KEYUP, K_DOWN, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT,) #pr
 pygame.init()
 import time, datetime
 from tkinter import *
-from random import randint
-from random import random
+import random
 from animals import Carnivore
 
 #tworzenie okna gry
@@ -50,34 +49,33 @@ def is_detected(width1, height1, width2, height2):
     else:
         False
 #######ROŚLINOŻERCA#######
-class Herbivore():
+class Herbivore(pygame.sprite.Sprite):
     def __init__(self):
-        self.x = randint(0,500)
-        self.y = randint(0,500)
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('monkey.png')
+        self.rect = self.image.get_rect() 
+        self.rect.x = random.randint(0,575)
+        self.rect.y = random.randint(0,575)
         self.HP = 90 #startowy poziom
-        self.mov_X = 0.15
-        self.mov_Y = 0.15
-    def appear(self):
-        herbivorePng = pygame.image.load('monkey.png')
-        screen.blit(herbivorePng,(self.x, self.y))
-    def move(self):
-        #roślinozerca nie wyjdzie poza ramę + odbije się, jeśli w nią wpadnie
-        if self.y <= 0:
-            self.mov_Y = random()
-        if self.y >= 575:
-            self.mov_Y = -(random())
-        if self.x <= 0:
-            self.mov_X= random()
-        if self.x >= 575:
-            self.mov_X = -(random())
-        #zmiana położenia roślinożercy
-        self.x += self.mov_X
-        self.y += self.mov_Y
-herbivores = []
-number_of_herbivores = 10
-for i in range(number_of_herbivores):
-    herbivores.append(Herbivore())
-    
+        self.directions = ['up', 'down','left','right']
+    def update(self):
+        direction = random.choice(self.directions)
+        if direction == "up":
+            self.rect.y -= 25
+            if self.rect.y <= 0:
+                self.rect.y = 0
+        if direction == "down":
+            self.rect.y += 25
+            if self.rect.y >= 575:
+                self.rect.y = 575
+        if direction == "left":
+            self.rect.x -= 25
+            if self.rect.x <= 0:
+                self.rect.x = 0
+        if direction == "right":
+            self.rect.x += 25
+            if self.rect.x >= 575:
+                self.rect.x = 575
 ###### OWOCE ######
 class Fruit():
     def __init__(self):
@@ -96,7 +94,13 @@ NUM_CARNIVORE = 4
 carnivores = []
 for i in range(NUM_CARNIVORE):
     carnivores.append(Carnivore())
-
+    
+our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające się obiekty w grze #do our_sprites wrzucamy wszystkie poruszające się elementy w grze
+herbivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy 
+for _ in range(10):
+    herbivore = Herbivore()
+    our_sprites.add(herbivore)
+    herbivores.add(herbivore)
 #trwanie gry - dopóki gracz jej nie wyłączy, wszystko musi być w pętli!
 running = True
 while running:
@@ -150,18 +154,18 @@ while running:
         player_X = 575
 #zielone tło
     screen.fill((127, 255, 0))
+    our_sprites.update() #aktualnie zawiera jedynie chodzenie roślinożerców
+    time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani 
 #aktualizacja ruchu gracza - początkowa pozycja + zmiana
     player_X += player_mov_X
     player_Y += player_mov_Y
-#roslinozercy sie pojawiaja 
-    for herbivore in herbivores:
-        herbivore.appear()
-        herbivore.move()
+
     for fruit in fruits:
         fruit.appear()
+    our_sprites.draw(screen) #to co wrzuciłyśmy do Sprite pojawia się na ekranie 
     for fruit in fruits[:]: 
         if is_detected(herbivore.x, herbivore.y, fruit.x, fruit.y) == True:
-            fruits.remove(fruit) #owoc znika z planszy po "zjedzeniu"
+            fruits.remove(fruit)
 
 #pojawienie się gracza na planszy
     player_appear()
