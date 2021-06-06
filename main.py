@@ -60,7 +60,7 @@ class Herbivore():
     def appear(self):
         herbivorePng = pygame.image.load('monkey.png')
         screen.blit(herbivorePng,(self.x, self.y))
-   def move(self):
+    def move(self):
         #roślinozerca nie wyjdzie poza ramę + odbije się, jeśli w nią wpadnie
         if self.y <= 0:
             self.mov_Y = random()
