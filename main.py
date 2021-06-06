@@ -70,7 +70,21 @@ herbivores = []
 number_of_herbivores = 10
 for i in range(number_of_herbivores):
     herbivores.append(Herbivore())
+    
+###### OWOCE ######
+class Fruit():
+    def __init__(self):
+        self.x = randint(0, 570)
+        self.y = randint(0, 570)
+    def appear(self):
+        fruitPNG = pygame.image.load('blueberry.png')
+        screen.blit(fruitPNG, (self.x, self.y))
 
+fruits = []
+number_of_fruits = randint(15,25)
+for _ in range(number_of_fruits):
+    fruits.append(Fruit())
+    
 NUM_CARNIVORE = 4
 carnivores = []
 for i in range(NUM_CARNIVORE):
@@ -133,9 +147,15 @@ while running:
     player_X += player_mov_X
     player_Y += player_mov_Y
 #roslinozercy sie pojawiaja 
-  for herbivore in herbivores:
+    for herbivore in herbivores:
         herbivore.appear()
         herbivore.move()
+    for fruit in fruits:
+        fruit.appear()
+    for fruit in fruits[:]: 
+        if is_detected(herbivore.x, herbivore.y, fruit.x, fruit.y):
+            fruits.remove(fruit) #owoc znika z planszy po zjedzeniu
+
 #pojawienie się gracza na planszy
     player_appear()
 
