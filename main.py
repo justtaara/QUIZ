@@ -122,13 +122,13 @@ while running:
                 running = False
 #działanie strzałek lub awsd - przyciskanie: (ruch gracza)
             if event.key == pygame.K_LEFT or event.key == ord('a'):
-                player_mov_X = -0.2
+                player_mov_X = -1.2
             if event.key == pygame.K_RIGHT or event.key == ord('d'):
-                player_mov_X = 0.2
+                player_mov_X = 1.2
             if event.key == pygame.K_UP or event.key == ord('w'):
-                player_mov_Y = -0.2
+                player_mov_Y = -1.2
             if event.key == pygame.K_DOWN or event.key == ord('s'):
-                player_mov_Y = 0.2
+                player_mov_Y = 1.2
 #działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
         if event.type == KEYUP:
             if event.key == pygame.K_LEFT or event.key == ord('a'):
