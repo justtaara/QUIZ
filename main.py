@@ -169,14 +169,7 @@ while running:
     screen.fill((127, 255, 0))
     our_sprites.update() #aktualnie zawiera jedynie chodzenie roślinożerców
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
-
-    for fruit in fruits:
-        fruit.appear()
-    our_sprites.draw(screen) #to co wrzuciłyśmy do Sprite pojawia się na ekranie
-    for fruit in fruits[:]:
-        if is_detected(herbivore.x, herbivore.y, fruit.x, fruit.y) == True:
-            fruits.remove(fruit)
-
+    
 #gracz się pojawia
     p.player_appear()
     p.player_move()
