@@ -46,22 +46,22 @@ class Player:
 #działanie strzałek lub awsd - przyciskanie: (ruch gracza)
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
                     self.mov_X = -4
-                if event.key == pygame.K_RIGHT or event.key == ord('d'):
+                elif event.key == pygame.K_RIGHT or event.key == ord('d'):
                     self.mov_X = 4
-                if event.key == pygame.K_UP or event.key == ord('w'):
+                elif event.key == pygame.K_UP or event.key == ord('w'):
                     self.mov_Y = -4
-                if event.key == pygame.K_DOWN or event.key == ord('s'):
+                elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     self.mov_Y = 4
         #działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
             if event.type == KEYUP:
                 print('KEYUP')
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
                     self.mov_X = 0
-                if event.key == pygame.K_RIGHT or event.key == ord('d'):
+                elif event.key == pygame.K_RIGHT or event.key == ord('d'):
                     self.mov_X = 0
-                if event.key == pygame.K_UP or event.key == ord('w'):
+                elif event.key == pygame.K_UP or event.key == ord('w'):
                     self.mov_Y = 0
-                if event.key == pygame.K_DOWN or event.key == ord('s'):
+                elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     self.mov_Y = 0
         #gracz nie wchodzi w ściany
         if self.player_Y <= 0:
