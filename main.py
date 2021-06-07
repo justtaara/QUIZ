@@ -107,12 +107,23 @@ class Herbivore(pygame.sprite.Sprite):
             if self.rect.x >= 575:
                 self.rect.x = 575
 ###### OWOCE ######
-class Fruit(pygame.sprite.Sprite):
+#jadalny
+class E_Fruit(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.x = random.randint(0, 570)
         self.y = random.randint(0, 570)
         self.image = pygame.image.load('blueberry.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0,575)
+        self.rect.y = random.randint(0,575)
+#niejadalny
+class I_Fruit(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = random.randint(0, 570)
+        self.y = random.randint(0, 570)
+        self.image = pygame.image.load('poisonous.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,575)
         self.rect.y = random.randint(0,575)
@@ -125,10 +136,14 @@ for i in range(NUM_CARNIVORE):
 our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające się obiekty w grze #do our_sprites wrzucamy wszystkie poruszające się elementy w grze
 herbivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy
 fruits = pygame.sprite.Group()
+for _ in range(15):
+    inedible_fruit = I_Fruit()
+    our_sprites.add(inedible_fruit)
+    inedible_fruits.add(inedible_fruit)
 for _ in range(25):
-    fruit = Fruit()
-    our_sprites.add(fruit)
-    fruits.add(fruit)
+    edible_fruit = E_Fruit()
+    our_sprites.add(edible_fruit)
+    edible_fruits.add(edible_fruit)
 for _ in range(10):
     herbivore = Herbivore()
     our_sprites.add(herbivore)
@@ -163,7 +178,7 @@ while running:
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji 
     #jeśli doszło to owoc znika z planszy 
-    pygame.sprite.groupcollide(herbivores, fruits, False, True, collided = None)
+    pygame.sprite.groupcollide(herbivores, edible_fruits, False, True, collided = None)
 #gracz się pojawia
     p.player_appear()
     p.player_move()
