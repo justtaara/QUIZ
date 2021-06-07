@@ -78,14 +78,6 @@ class Player:
         self.player_Y += self.mov_Y
         #print(self.player_X, self.player_Y)
 p = Player()
-
-##SPRAWDZANIE, CZY NASTĄPIŁA DETEKCJA OBIEKTU###
-def is_detected(width1, height1, width2, height2):
-    if width1 >= width2 and width1 <= width2 + 32: #32x32 wymiar ikonki
-        if height1 >= height2 and height1 >= height2 + 32:
-            return True
-    else:
-        False
 #######ROŚLINOŻERCA#######
 class Herbivore(pygame.sprite.Sprite):
     def __init__(self):
@@ -169,7 +161,9 @@ while running:
     screen.fill((127, 255, 0))
     our_sprites.update() #aktualnie zawiera jedynie chodzenie roślinożerców
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
-    
+    #sprawdzanie czy nie doszło do kolizji 
+    #jeśli doszło to owoc znika z planszy 
+    pygame.sprite.groupcollide(herbivores, fruits, False, True, collided = None)
 #gracz się pojawia
     p.player_appear()
     p.player_move()
