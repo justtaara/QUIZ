@@ -99,35 +99,32 @@ class Herbivore(pygame.sprite.Sprite):
     def update(self):
         direction = random.choice(self.directions)
         if direction == "up":
-            self.rect.y -= 25
+            self.rect.y -= 20
             if self.rect.y <= 0:
                 self.rect.y = 0
         if direction == "down":
-            self.rect.y += 25
+            self.rect.y += 20
             if self.rect.y >= 575:
                 self.rect.y = 575
         if direction == "left":
-            self.rect.x -= 25
+            self.rect.x -= 20
             if self.rect.x <= 0:
                 self.rect.x = 0
         if direction == "right":
-            self.rect.x += 25
+            self.rect.x += 20
             if self.rect.x >= 575:
                 self.rect.x = 575
 ###### OWOCE ######
-class Fruit():
+class Fruit(pygame.sprite.Sprite):
     def __init__(self):
-        self.x = randint(0, 570)
-        self.y = randint(0, 570)
-    def appear(self):
-        fruitPNG = pygame.image.load('blueberry.png')
-        screen.blit(fruitPNG, (self.x, self.y))
-
-fruits = []
-number_of_fruits = randint(15,25)
-for _ in range(number_of_fruits):
-    fruits.append(Fruit())
-
+        pygame.sprite.Sprite.__init__(self)
+        self.x = random.randint(0, 570)
+        self.y = random.randint(0, 570)
+        self.image = pygame.image.load('blueberry.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0,575)
+        self.rect.y = random.randint(0,575)
+        
 NUM_CARNIVORE = 4
 carnivores = []
 for i in range(NUM_CARNIVORE):
@@ -135,6 +132,11 @@ for i in range(NUM_CARNIVORE):
 
 our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające się obiekty w grze #do our_sprites wrzucamy wszystkie poruszające się elementy w grze
 herbivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy
+fruits = pygame.sprite.Group()
+for _ in range(25):
+    fruit = Fruit()
+    our_sprites.add(fruit)
+    fruits.add(fruit)
 for _ in range(10):
     herbivore = Herbivore()
     our_sprites.add(herbivore)
