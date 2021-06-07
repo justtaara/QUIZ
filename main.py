@@ -173,7 +173,7 @@ while running:
 #gracz się pojawia
     p.player_appear()
     p.player_move()
-
+    our_sprites.draw(screen) 
     for carnivore in carnivores:
         carnivore.move()
         carnivore.appear(screen)
