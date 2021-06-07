@@ -164,7 +164,8 @@ for i in range(NUM_CARNIVORE):
 
 our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające się obiekty w grze #do our_sprites wrzucamy wszystkie poruszające się elementy w grze
 herbivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy
-fruits = pygame.sprite.Group()
+edible_fruits = pygame.sprite.Group()
+inedible_fruits = pygame.sprite.Group()
 for _ in range(15):
     inedible_fruit = I_Fruit()
     our_sprites.add(inedible_fruit)
