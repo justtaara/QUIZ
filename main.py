@@ -45,13 +45,13 @@ class Player:
                 print('KEYDOWN')
 #działanie strzałek lub awsd - przyciskanie: (ruch gracza)
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
-                    self.mov_X = -4
+                    self.mov_X = -20
                 elif event.key == pygame.K_RIGHT or event.key == ord('d'):
-                    self.mov_X = 4
+                    self.mov_X = 20
                 elif event.key == pygame.K_UP or event.key == ord('w'):
-                    self.mov_Y = -4
+                    self.mov_Y = -20
                 elif event.key == pygame.K_DOWN or event.key == ord('s'):
-                    self.mov_Y = 4
+                    self.mov_Y = 20
         #działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
             if event.type == KEYUP:
                 print('KEYUP')
@@ -84,28 +84,57 @@ class Herbivore(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('monkey.png')
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0,575)
-        self.rect.y = random.randint(0,575)
-        self.HP = 90 #startowy poziom
+        self.rect.x = random.randint(0,565)
+        self.rect.y = random.randint(0,565)
+        self.HP = 800  #startowy poziom
+        self.HP_max = 900
+        self.health_bar_len = 30
+        self.health_ratio = self.HP_max / self.health_bar_len
         self.directions = ['up', 'down','left','right']
     def update(self):
         direction = random.choice(self.directions)
         if direction == "up":
             self.rect.y -= 20
-            if self.rect.y <= 0:
-                self.rect.y = 0
-        if direction == "down":
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
+            if self.rect.y <= 10:
+                self.rect.y = 10
+        elif direction == "down":
             self.rect.y += 20
-            if self.rect.y >= 575:
-                self.rect.y = 575
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
+            if self.rect.y >= 565:
+                self.rect.y = 565
         if direction == "left":
             self.rect.x -= 20
-            if self.rect.x <= 0:
-                self.rect.x = 0
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
+            if self.rect.x <= 10:
+                self.rect.x = 10
         if direction == "right":
             self.rect.x += 20
-            if self.rect.x >= 575:
-                self.rect.x = 575
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
+            if self.rect.x >= 565:
+                self.rect.x = 565
+        self.health_bar()
+    def eat_edible_fruit(self, amount):
+        if self.HP < self.HP_max:
+            self.HP += amount
+        if self.HP >= self.HP_max:
+            self.HP = self.HP_max
+    def eat_inedible_fruit(self, amount):
+        if self.HP > 0:
+            self.HP -= amount
+        if self.HP <= 0:
+            self.kill()
+    def health_bar(self):
+        pygame.draw.rect(screen, (255,0,0), ((self.rect.x - 5), (self.rect.y-10), self.HP/self.health_ratio, 10))
+        pygame.draw.rect(screen, (255,255,255), ((self.rect.x - 5), (self.rect.y-10), self.health_bar_len,10), 1)
 ###### OWOCE ######
 #jadalny
 class E_Fruit(pygame.sprite.Sprite):
@@ -178,7 +207,11 @@ while running:
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji 
     #jeśli doszło to owoc znika z planszy 
-    pygame.sprite.groupcollide(herbivores, edible_fruits, False, True, collided = None)
+    if pygame.sprite.groupcollide(herbivores, edible_fruits, False, True, collided = None):
+        herbivore.eat_edible_fruit(60)
+    if pygame.sprite.groupcollide(herbivores, inedible_fruits, False, True, collided = None):
+        herbivore.eat_inedible_fruit(90)
+
 #gracz się pojawia
     p.player_appear()
     p.player_move()
