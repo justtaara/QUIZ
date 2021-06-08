@@ -14,10 +14,11 @@ screen = pygame.display.set_mode([screen_width,screen_height])
 
 #Nazwa gry i ikonka
 pygame.display.set_caption("Welcome to the jungle")
-icon = pygame.image.load("jungle.png") #ikona z flaticon.com, Freepik!
+icon = pygame.image.load("logo.png") #ikona z flaticon.com, Freepik!
 pygame.display.set_icon(icon)
 #tło gry/mapka dodanie obrazka
 jungle_map = pygame.image.load("mapjungle.png")
+
 #####GUI#########
 def przycisk_koniec():
     pygame.quit()
@@ -28,34 +29,35 @@ def przycisk_ponownie():
 timer_stop = datetime.datetime.utcnow() +datetime.timedelta(seconds=90) #SEKUNDY ODLICZANIE - 1,5 minuty
 
 #######GRACZ#######
-class Player:
+class Player(pygame.sprite.Sprite):
     def __init__(self):
-        self.player_X = 300
-        self.player_Y = 300
         self.mov_X = 0
         self.mov_Y = 0
+        self.HP_Player = 100
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('jaguar_main.png')
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.rect.x, self.rect.y)
+        self.rect.x = 300
+        self.rect.y = 300
 
-    def player_appear(self):
-        playerPng = pygame.image.load('jaguar_main.png')
-        screen.blit(playerPng,(int(self.player_X), int(self.player_Y)))
-        player_box = pygame.Rect(int(self.player_X), int(self.player_Y),int(self.player_X), int(self.player_Y))
-
-    def player_move(self):
+    def update(self):
+        self.mov_X = 0
+        self.mov_Y = 0
+        speed = 10
         for event in pygame.event.get():
             if event.type == KEYDOWN:
-                print('KEYDOWN')
 #działanie strzałek lub awsd - przyciskanie: (ruch gracza)
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
-                    self.mov_X = -20
+                    self.mov_X = - speed
                 elif event.key == pygame.K_RIGHT or event.key == ord('d'):
-                    self.mov_X = 20
+                    self.mov_X = speed
                 elif event.key == pygame.K_UP or event.key == ord('w'):
-                    self.mov_Y = -20
+                    self.mov_Y = -speed
                 elif event.key == pygame.K_DOWN or event.key == ord('s'):
-                    self.mov_Y = 20
-        #działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
+                    self.mov_Y = speed
+#działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
             if event.type == KEYUP:
-                print('KEYUP')
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
                     self.mov_X = 0
                 elif event.key == pygame.K_RIGHT or event.key == ord('d'):
@@ -65,20 +67,20 @@ class Player:
                 elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     self.mov_Y = 0
         #gracz nie wchodzi w ściany
-        if self.player_Y <= 0:
-            self.player_Y = 0
-        if self.player_Y >=575:
-            self.player_Y = 575
-        if self.player_X <= 0:
-            self.player_X = 0
-        if self.player_X >= 575:
-            self.player_X = 575
+        if self.rect.y <= 0:
+            self.rect.y = 0
+        if self.rect.y >=575:
+            self.rect.y = 575
+        if self.rect.x <= 0:
+            self.rect.x = 0
+        if self.rect.x >= 575:
+            self.rect.x = 575
         #aktualizacja ruchu gracza - początkowa pozycja + zmiana
-        #print(self.mov_X, self.mov_Y)
-        self.player_X += self.mov_X
-        self.player_Y += self.mov_Y
-        #print(self.player_X, self.player_Y)
-p = Player()
+        self.rect.x += self.mov_X
+        self.rect.y += self.mov_Y
+
+player = Player()
+
 #######ROŚLINOŻERCA#######
 class Herbivore(pygame.sprite.Sprite):
     def __init__(self):
@@ -157,7 +159,7 @@ class I_Fruit(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,575)
         self.rect.y = random.randint(0,575)
-        
+
 NUM_CARNIVORE = 4
 carnivores = []
 for i in range(NUM_CARNIVORE):
@@ -167,6 +169,9 @@ our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające si
 herbivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy
 edible_fruits = pygame.sprite.Group()
 inedible_fruits = pygame.sprite.Group()
+Player = pygame.sprite.Group()
+our_sprites.add(player)
+
 for _ in range(15):
     inedible_fruit = I_Fruit()
     our_sprites.add(inedible_fruit)
@@ -203,22 +208,19 @@ while running:
             if event.key == K_ESCAPE: #wyjście z gry przyciskiem escape
                 running = False
 
-#zielone tło 
 #update - tło dżungla
     screen.blit(jungle_map , (0,0))
     our_sprites.update() #aktualnie zawiera jedynie chodzenie roślinożerców
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
-    #sprawdzanie czy nie doszło do kolizji 
-    #jeśli doszło to owoc znika z planszy 
+    #sprawdzanie czy nie doszło do kolizji
+    #jeśli doszło to owoc znika z planszy
     if pygame.sprite.groupcollide(herbivores, edible_fruits, False, True, collided = None):
         herbivore.eat_edible_fruit(60)
     if pygame.sprite.groupcollide(herbivores, inedible_fruits, False, True, collided = None):
         herbivore.eat_inedible_fruit(90)
 
 #gracz się pojawia
-    p.player_appear()
-    p.player_move()
-    our_sprites.draw(screen) 
+    our_sprites.draw(screen)
     for carnivore in carnivores:
         carnivore.move()
         carnivore.appear(screen)
@@ -226,4 +228,3 @@ while running:
 #koniec pętli
     pygame.display.flip()
 pygame.quit()
-
