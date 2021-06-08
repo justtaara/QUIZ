@@ -30,7 +30,7 @@ def przycisk_ponownie():
 # Emit an event every second
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 font = pygame.font.SysFont('Consolas', 30)
-secs_left = 10
+secs_left = 90
 
 def update_timer():
     "Show the timer in the top-right corner"
