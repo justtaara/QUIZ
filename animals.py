@@ -20,7 +20,7 @@ class Animal:
     # Randomly move the animal
     def move(self):
         mu = 0
-        sigma = 1
+        sigma = 10
 
         self.x += random.gauss(mu, sigma)
         self.y += random.gauss(mu, sigma)
@@ -37,7 +37,7 @@ class Animal:
 
 
 class Carnivore(Animal):
-    animal_image = 'lion.png'
+    animal_image = 'jaguar_angry.png'
     energy_cost = 2
 
     def __init__(self, x=None, y=None, attack_strength=10, hp=100):
@@ -58,7 +58,4 @@ class Carnivore(Animal):
         "Eat a carnivore or an omnivore"
         self.hp += animal.caloric_value
 
-
-class Player(Carnivore):
-    pass
 
