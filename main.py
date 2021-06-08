@@ -26,7 +26,19 @@ def przycisk_ponownie():
     pass #jeszcze nie wiem, jak to zrobić
 
 #########CZAS##########
-timer_stop = datetime.datetime.utcnow() +datetime.timedelta(seconds=90) #SEKUNDY ODLICZANIE - 1,5 minuty
+
+# Emit an event every second
+pygame.time.set_timer(pygame.USEREVENT, 1000)
+font = pygame.font.SysFont('Consolas', 30)
+secs_left = 10
+
+def update_timer():
+    "Show the timer in the top-right corner"
+    color_white = (255, 255, 255)
+    text = str(secs_left).rjust(3)
+    rendered_text = font.render(text, True, color_white)
+    position = (530, 10)  # decided by trial and error
+    screen.blit(rendered_text, position)
 
 #######GRACZ#######
 class Player(pygame.sprite.Sprite):
@@ -188,7 +200,7 @@ for _ in range(10):
 running = True
 while running:
 #okienko pojawiające się, kiedy kończy się czas
-    if datetime.datetime.utcnow() > timer_stop:
+    if secs_left == 0:
         glowne_okno=Tk()
         glowne_okno.title("Koniec gry!")
         glowne_okno.geometry("250x250")
@@ -207,6 +219,8 @@ while running:
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE: #wyjście z gry przyciskiem escape
                 running = False
+        if event.type == pygame.USEREVENT:
+            secs_left -= 1
 
 #update - tło dżungla
     screen.blit(jungle_map , (0,0))
@@ -225,6 +239,7 @@ while running:
         carnivore.move()
         carnivore.appear(screen)
 
+    update_timer()
 #koniec pętli
     pygame.display.flip()
 pygame.quit()
