@@ -5,6 +5,7 @@ pygame.init()
 import time
 from tkinter import *
 import random
+from animals import Carnivore
 
 #tworzenie okna gry
 screen_width = 600
@@ -92,60 +93,50 @@ class Player(pygame.sprite.Sprite):
 
 player = Player()
 
-####### ROŚLINOŻERCY I MIĘSOŻERCY #######
-class Animal(pygame.sprite.Sprite):
-    animal_image = ''
-    HP_max = 0
-    HP_start = 0
+#######ROŚLINOŻERCA#######
+class Herbivore(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(self.animal_image)
+        self.image = pygame.image.load('monkeys.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,565)
         self.rect.y = random.randint(0,565)
-        self.HP = self.HP_start  #startowy poziom
+        self.HP = 800  #startowy poziom
+        self.HP_max = 900
         self.health_bar_len = 30
         self.health_ratio = self.HP_max / self.health_bar_len
         self.directions = ['up', 'down','left','right']
-
-    def move(self):
+    def update(self):
         direction = random.choice(self.directions)
         if direction == "up":
             self.rect.y -= 20
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
             if self.rect.y <= 10:
                 self.rect.y = 10
         elif direction == "down":
             self.rect.y += 20
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
             if self.rect.y >= 565:
                 self.rect.y = 565
         if direction == "left":
             self.rect.x -= 20
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
             if self.rect.x <= 10:
                 self.rect.x = 10
         if direction == "right":
             self.rect.x += 20
+            self.HP -= 15
+            if self.HP <= 0:
+                self.kill()
             if self.rect.x >= 565:
                 self.rect.x = 565
-
-    def use_hp(self):
-        self.HP -= 15
-        if self.HP <= 0:
-            self.kill()
-
-    def update(self):
-        self.move()
-        self.use_hp()
         self.health_bar()
-
-    def health_bar(self):
-        pygame.draw.rect(screen, (255,0,0), ((self.rect.x - 5), (self.rect.y-10), self.HP/self.health_ratio, 10))
-        pygame.draw.rect(screen, (255,255,255), ((self.rect.x - 5), (self.rect.y-10), self.health_bar_len,10), 1)
-
-class Herbivore(Animal):
-    animal_image = 'monkeys.png'
-    HP_max = 900
-    HP_start = 800
-
     def eat_edible_fruit(self, amount):
         if self.HP < self.HP_max:
             self.HP += amount
@@ -156,13 +147,9 @@ class Herbivore(Animal):
             self.HP -= amount
         if self.HP <= 0:
             self.kill()
-
-class Carnivore(Animal):
-    animal_image = 'jaguar_angry.png'
-    HP_max = 1500
-    HP_start = 500
-
-
+    def health_bar(self):
+        pygame.draw.rect(screen, (255,0,0), ((self.rect.x - 5), (self.rect.y-10), self.HP/self.health_ratio, 10))
+        pygame.draw.rect(screen, (255,255,255), ((self.rect.x - 5), (self.rect.y-10), self.health_bar_len,10), 1)
 ###### OWOCE ######
 #jadalny
 class E_Fruit(pygame.sprite.Sprite):
@@ -185,16 +172,17 @@ class I_Fruit(pygame.sprite.Sprite):
         self.rect.x = random.randint(0,575)
         self.rect.y = random.randint(0,575)
 
+NUM_CARNIVORE = 4
+carnivores = []
+for i in range(NUM_CARNIVORE):
+    carnivores.append(Carnivore())
+
 our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające się obiekty w grze #do our_sprites wrzucamy wszystkie poruszające się elementy w grze
 herbivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy
-carnivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy
 edible_fruits = pygame.sprite.Group()
 inedible_fruits = pygame.sprite.Group()
 Player = pygame.sprite.Group()
 our_sprites.add(player)
-
-NUM_CARNIVORES = 4
-
 
 for _ in range(15):
     inedible_fruit = I_Fruit()
@@ -208,12 +196,6 @@ for _ in range(10):
     herbivore = Herbivore()
     our_sprites.add(herbivore)
     herbivores.add(herbivore)
-
-for _ in range(NUM_CARNIVORES):
-    carnivore = Carnivore()
-    our_sprites.add(carnivore)
-    carnivores.add(carnivore)
-
 #trwanie gry - dopóki gracz jej nie wyłączy, wszystko musi być w pętli!
 running = True
 while running:
@@ -253,6 +235,9 @@ while running:
 
 #gracz się pojawia
     our_sprites.draw(screen)
+    for carnivore in carnivores:
+        carnivore.move()
+        carnivore.appear(screen)
 
     update_timer()
 #koniec pętli
