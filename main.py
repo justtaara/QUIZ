@@ -16,7 +16,8 @@ screen = pygame.display.set_mode([screen_width,screen_height])
 pygame.display.set_caption("Welcome to the jungle")
 icon = pygame.image.load("jungle.png") #ikona z flaticon.com, Freepik!
 pygame.display.set_icon(icon)
-
+#tło gry/mapka dodanie obrazka
+jungle_map = pygame.image.load("mapjungle.png")
 #####GUI#########
 def przycisk_koniec():
     pygame.quit()
@@ -35,7 +36,7 @@ class Player:
         self.mov_Y = 0
 
     def player_appear(self):
-        playerPng = pygame.image.load('lion.png')
+        playerPng = pygame.image.load('jaguar_main.png')
         screen.blit(playerPng,(int(self.player_X), int(self.player_Y)))
         player_box = pygame.Rect(int(self.player_X), int(self.player_Y),int(self.player_X), int(self.player_Y))
 
@@ -82,7 +83,7 @@ p = Player()
 class Herbivore(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('monkey.png')
+        self.image = pygame.image.load('monkeys.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,565)
         self.rect.y = random.randint(0,565)
@@ -142,7 +143,7 @@ class E_Fruit(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = random.randint(0, 570)
         self.y = random.randint(0, 570)
-        self.image = pygame.image.load('blueberry.png')
+        self.image = pygame.image.load('fruit_1.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,575)
         self.rect.y = random.randint(0,575)
@@ -152,7 +153,7 @@ class I_Fruit(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = random.randint(0, 570)
         self.y = random.randint(0, 570)
-        self.image = pygame.image.load('poisonous.png')
+        self.image = pygame.image.load('fruit_2.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,575)
         self.rect.y = random.randint(0,575)
@@ -202,8 +203,9 @@ while running:
             if event.key == K_ESCAPE: #wyjście z gry przyciskiem escape
                 running = False
 
-#zielone tło
-    screen.fill((127, 255, 0))
+#zielone tło 
+#update - tło dżungla
+    screen.blit(jungle_map , (0,0))
     our_sprites.update() #aktualnie zawiera jedynie chodzenie roślinożerców
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji 
