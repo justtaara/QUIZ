@@ -2,7 +2,7 @@
 import pygame
 from pygame.locals import (KEYUP, K_DOWN, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT,) #przyciski
 pygame.init()
-import time, datetime
+import time
 from tkinter import *
 import random
 from animals import Carnivore
