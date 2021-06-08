@@ -9,7 +9,7 @@ from animals import Carnivore
 
 #tworzenie okna gry
 screen_width = 600
-screen_height = 600
+screen_height = 650
 screen = pygame.display.set_mode([screen_width,screen_height])
 
 #Nazwa gry i ikonka
