@@ -46,7 +46,10 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         self.mov_X = 0
         self.mov_Y = 0
-        self.HP_Player = 100
+        self.HP_Player = 1000
+        self.HP_Player_Max = 1100
+        self.health_bar_len = 30
+        self.health_ratio = self.HP_Player_Max / self.health_bar_len
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('jaguar_main.png')
         self.rect = self.image.get_rect()
@@ -63,12 +66,24 @@ class Player(pygame.sprite.Sprite):
 #działanie strzałek lub awsd - przyciskanie: (ruch gracza)
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
                     self.mov_X = - speed
+                    self.HP_Player -= 1
+                    if self.HP_Player <= 0:
+                        self.kill()
                 elif event.key == pygame.K_RIGHT or event.key == ord('d'):
                     self.mov_X = speed
+                    self.HP_Player -= 1
+                    if self.HP_Player <= 0:
+                        self.kill()
                 elif event.key == pygame.K_UP or event.key == ord('w'):
                     self.mov_Y = -speed
+                    self.HP_Player -= 1
+                    if self.HP_Player <= 0:
+                        self.kill()
                 elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     self.mov_Y = speed
+                    self.HP_Player -= 1
+                    if self.HP_Player <= 0:
+                        self.kill()
 #działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
             if event.type == KEYUP:
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
@@ -79,6 +94,7 @@ class Player(pygame.sprite.Sprite):
                     self.mov_Y = 0
                 elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     self.mov_Y = 0
+
         #gracz nie wchodzi w ściany
         if self.rect.y <= 0:
             self.rect.y = 0
@@ -88,9 +104,25 @@ class Player(pygame.sprite.Sprite):
             self.rect.x = 0
         if self.rect.x >= 575:
             self.rect.x = 575
+
+        self.health_bar()
+
         #aktualizacja ruchu gracza - początkowa pozycja + zmiana
         self.rect.x += self.mov_X
         self.rect.y += self.mov_Y
+
+    def eat_herbovivore():
+        pass
+
+    def eat_fruit():
+        pass
+
+    def eat_bad_fruit():
+        pass
+
+    def health_bar(self):
+        pygame.draw.rect(screen, (102,255,000), ((self.rect.x + 10), (self.rect.y-10), self.HP_Player/self.health_ratio, 10))
+        pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 10), (self.rect.y-10), self.health_bar_len,10), 1)
 
 player = Player()
 
@@ -152,6 +184,8 @@ class Herbivore(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255,0,0), ((self.rect.x - 5), (self.rect.y-10), self.HP/self.health_ratio, 10))
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x - 5), (self.rect.y-10), self.health_bar_len,10), 1)
 ###### OWOCE ######
+
+
 #jadalny
 class E_Fruit(pygame.sprite.Sprite):
     def __init__(self):
@@ -197,6 +231,7 @@ for _ in range(10):
     herbivore = Herbivore()
     our_sprites.add(herbivore)
     herbivores.add(herbivore)
+
 #trwanie gry - dopóki gracz jej nie wyłączy, wszystko musi być w pętli!
 running = True
 while running:
@@ -234,7 +269,6 @@ while running:
     if pygame.sprite.groupcollide(herbivores, inedible_fruits, False, True, collided = None):
         herbivore.eat_inedible_fruit(90)
 
-#gracz się pojawia
     our_sprites.draw(screen)
     for carnivore in carnivores:
         carnivore.move()
