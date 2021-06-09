@@ -41,6 +41,9 @@ def update_timer():
     position = (530, 10)  # decided by trial and error
     screen.blit(rendered_text, position)
 
+#gracz chodzi kiedy trzyma się klawisz
+pygame.key.set_repeat(3,2)
+
 #######GRACZ#######
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -60,7 +63,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.mov_X = 0
         self.mov_Y = 0
-        speed = 10
+        speed = 5
         for event in pygame.event.get():
             if event.type == KEYDOWN:
 #działanie strzałek lub awsd - przyciskanie: (ruch gracza)
@@ -96,20 +99,21 @@ class Player(pygame.sprite.Sprite):
                     self.mov_Y = 0
 
         #gracz nie wchodzi w ściany
-        if self.rect.y <= 0:
-            self.rect.y = 0
+        if self.rect.y <= 50:
+            self.rect.y = 50
         if self.rect.y >=575:
             self.rect.y = 575
         if self.rect.x <= 0:
             self.rect.x = 0
         if self.rect.x >= 575:
             self.rect.x = 575
-
+        #health bar gracza
         self.health_bar()
 
         #aktualizacja ruchu gracza - początkowa pozycja + zmiana
-        self.rect.x += self.mov_X
-        self.rect.y += self.mov_Y
+        for i in range(3):
+            self.rect.x += self.mov_X
+            self.rect.y += self.mov_Y
 
     def eat_herbovivore():
         pass
@@ -168,7 +172,7 @@ class Herbivore(pygame.sprite.Sprite):
         if self.HP < self.HP_max:
             self.HP += amount
         if self.HP >= self.HP_max:
-            self.HP = self.HP_max
+            self.HP = self.HP_max5
     def eat_inedible_fruit(self, amount):
         if self.HP > 0:
             self.HP -= amount
@@ -204,6 +208,7 @@ carnivores = []
 for i in range(NUM_CARNIVORE):
     carnivores.append(Carnivore())
 
+player.update()
 our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające się obiekty w grze #do our_sprites wrzucamy wszystkie poruszające się elementy w grze
 herbivores = pygame.sprite.Group() #klasy przedmiotów tworzą osobne grupy
 edible_fruits = pygame.sprite.Group()
@@ -252,10 +257,11 @@ while running:
 
 #update - tło dżungla
     screen.blit(jungle_map , (0,0))
-    our_sprites.update() #aktualnie zawiera jedynie chodzenie roślinożerców
+    our_sprites.update()
+    player.update() #aktualnie zawiera jedynie chodzenie roślinożerców
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji
-    #jeśli doszło to owoc pojawia się gdzieś indziej 
+    #jeśli doszło to owoc pojawia się gdzieś indziej
    #groupcollide() przechowuje wyrzucone z planszy elementy i można je ponownie przywołac
     eating = pygame.sprite.groupcollide(herbivores, edible_fruits, False, True)
     herbivore.eat_edible_fruit(100)
