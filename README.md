@@ -9,3 +9,4 @@ https://www.youtube.com/watch?v=-5GNbL33hz0&list=PLsk-HSGFjnaH5yghzu7PcOzm9NhsW0
 https://stackoverflow.com/questions/40632424/pygame-remove-a-single-sprite-from-a-group/40640592
 https://python-forum.io/thread-6276.html
 https://www.youtube.com/watch?v=DVYDkHdsTIM
+https://stackoverflow.com/questions/63927331/how-to-have-each-sprite-in-a-group-a-chasing-the-closest-sprite-in-group-b
