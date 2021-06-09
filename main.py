@@ -42,7 +42,7 @@ def update_timer():
     screen.blit(rendered_text, position)
 
 #gracz chodzi kiedy trzyma się klawisz
-pygame.key.set_repeat(3,2)
+pygame.key.set_repeat(2,3)
 
 #######GRACZ#######
 class Player(pygame.sprite.Sprite):
@@ -107,6 +107,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.x = 0
         if self.rect.x >= 575:
             self.rect.x = 575
+
         #health bar gracza
         self.health_bar()
 
@@ -115,14 +116,23 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.mov_X
             self.rect.y += self.mov_Y
 
-    def eat_herbovivore():
-        pass
+    def eat_herbivore(player, herbivores):
+        eat = pygame.sprite.collide_rect(player, herbivores)
+        if eat == True:
+            print("roślinożerca namierzony")
+            # self.HP_Player += 100
 
-    def eat_fruit():
-        pass
+    def eat_fruit(player, edible_fruits):
+        eat2 = pygame.sprite.collide_rect(player, edible_fruits)
+        if eat2 == True:
+            print("jedzenie namierzone")
+            # self.HP_Player += 20
 
-    def eat_bad_fruit():
-        pass
+    def eat_bad_fruit(player, inedible_fruits):
+        eat3 = pygame.sprite.collide_rect(player, inedible_fruits)
+        if eat3 == True:
+            print("trucizna namierzona")
+            # self.HP_Player -= 20
 
     def health_bar(self):
         pygame.draw.rect(screen, (102,255,000), ((self.rect.x + 10), (self.rect.y-10), self.HP_Player/self.health_ratio, 10))
@@ -163,6 +173,7 @@ class Herbivore(pygame.sprite.Sprite):
             if self.rect.x <= 0:
                 self.rect.x = 0
     def update(self):
+        player.update()
         self.looking_for_food(edible_fruit)
         self.HP -= 5
         if self.HP <= 0:
@@ -258,13 +269,14 @@ while running:
 #update - tło dżungla
     screen.blit(jungle_map , (0,0))
     our_sprites.update()
-    player.update() #aktualnie zawiera jedynie chodzenie roślinożerców
+    player.update()
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji
     #jeśli doszło to owoc pojawia się gdzieś indziej
    #groupcollide() przechowuje wyrzucone z planszy elementy i można je ponownie przywołac
     eating = pygame.sprite.groupcollide(herbivores, edible_fruits, False, True)
     herbivore.eat_edible_fruit(100)
+
     for i in eating:
         fruit = E_Fruit()
         our_sprites.add(fruit)
@@ -276,11 +288,15 @@ while running:
         our_sprites.add(poison)
         inedible_fruits.add(poison)
 
-
     our_sprites.draw(screen)
     for carnivore in carnivores:
         carnivore.move()
         carnivore.appear(screen)
+
+#gracz - funkcje jedzenia
+    player.eat_herbivore(herbivore)
+    player.eat_fruit(edible_fruit)
+    player.eat_bad_fruit(inedible_fruit)
 
     update_timer()
 #koniec pętli
