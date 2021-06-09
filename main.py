@@ -138,37 +138,31 @@ class Herbivore(pygame.sprite.Sprite):
         self.HP_max = 900
         self.health_bar_len = 30
         self.health_ratio = self.HP_max / self.health_bar_len
-        self.directions = ['up', 'down','left','right']
-    def update(self):
-        direction = random.choice(self.directions)
-        if direction == "up":
-            self.rect.y -= 20
-            self.HP -= 15
-            if self.HP <= 0:
-                self.kill()
-            if self.rect.y <= 10:
-                self.rect.y = 10
-        elif direction == "down":
+    #teoretycznie szuka najbliższego owocu, praktycznie małpki się gromadzą sprites() robi listę z grupy,
+    def looking_for_food(self, edible_fruit):
+        edible_fruit = min([e for e in edible_fruits.sprites()],
+                            key=lambda e: pow(e.rect.x - self.rect.x, 2) + pow(e.rect.y-self.rect.y,2))
+        if self.rect.y - edible_fruit.y < 0:
             self.rect.y += 20
-            self.HP -= 15
-            if self.HP <= 0:
-                self.kill()
-            if self.rect.y >= 565:
-                self.rect.y = 565
-        if direction == "left":
-            self.rect.x -= 20
-            self.HP -= 15
-            if self.HP <= 0:
-                self.kill()
-            if self.rect.x <= 10:
-                self.rect.x = 10
-        if direction == "right":
+            if self.rect.y >= 530:
+                self.rect.y = 530
+        else:
+            self.rect.y -= 20
+            if self.rect.y <= 50:
+                self.rect.y = 50
+        if self.rect.x - edible_fruit.x < 0:
             self.rect.x += 20
-            self.HP -= 15
-            if self.HP <= 0:
-                self.kill()
-            if self.rect.x >= 565:
-                self.rect.x = 565
+            if self.rect.x >=520:
+                self.rect.y = 520
+        else:
+            self.rect.x -= 20
+            if self.rect.x <= 0:
+                self.rect.x = 0
+    def update(self):
+        self.looking_for_food(edible_fruit)
+        self.HP -= 5
+        if self.HP <= 0:
+            self.kill()
         self.health_bar()
     def eat_edible_fruit(self, amount):
         if self.HP < self.HP_max:
@@ -184,8 +178,6 @@ class Herbivore(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255,0,0), ((self.rect.x - 5), (self.rect.y-10), self.HP/self.health_ratio, 10))
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x - 5), (self.rect.y-10), self.health_bar_len,10), 1)
 ###### OWOCE ######
-
-
 #jadalny
 class E_Fruit(pygame.sprite.Sprite):
     def __init__(self):
@@ -263,11 +255,21 @@ while running:
     our_sprites.update() #aktualnie zawiera jedynie chodzenie roślinożerców
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji
-    #jeśli doszło to owoc znika z planszy
-    if pygame.sprite.groupcollide(herbivores, edible_fruits, False, True, collided = None):
-        herbivore.eat_edible_fruit(60)
-    if pygame.sprite.groupcollide(herbivores, inedible_fruits, False, True, collided = None):
-        herbivore.eat_inedible_fruit(90)
+    #jeśli doszło to owoc pojawia się gdzieś indziej 
+   #groupcollide() przechowuje wyrzucone z planszy elementy i można je ponownie przywołac
+    eating = pygame.sprite.groupcollide(herbivores, edible_fruits, False, True)
+    herbivore.eat_edible_fruit(100)
+    for i in eating:
+        fruit = E_Fruit()
+        our_sprites.add(fruit)
+        edible_fruits.add(fruit)
+    poisioning = pygame.sprite.groupcollide(herbivores, inedible_fruits, False, True)
+    herbivore.eat_inedible_fruit(150)
+    for _ in poisioning:
+        poison = I_Fruit()
+        our_sprites.add(poison)
+        inedible_fruits.add(poison)
+
 
     our_sprites.draw(screen)
     for carnivore in carnivores:
