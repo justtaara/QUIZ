@@ -4,6 +4,7 @@ from pygame.locals import (KEYUP, K_DOWN, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT,) #pr
 pygame.init()
 import time
 from tkinter import *
+from tkinter import messagebox
 import random
 from animals import Carnivore
 
@@ -23,7 +24,7 @@ jungle_map = pygame.image.load("mapjungle.png")
 def przycisk_koniec():
     pygame.quit()
 def przycisk_ponownie():
-    pass #jeszcze nie wiem, jak to zrobić
+    messagebox.showinfo("Ups!","Niestety, w życiu nie ma drugich szans!")
 
 #########CZAS##########
 
