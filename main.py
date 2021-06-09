@@ -172,7 +172,7 @@ class Herbivore(pygame.sprite.Sprite):
         if self.HP < self.HP_max:
             self.HP += amount
         if self.HP >= self.HP_max:
-            self.HP = self.HP_max5
+            self.HP = self.HP_max
     def eat_inedible_fruit(self, amount):
         if self.HP > 0:
             self.HP -= amount
