@@ -146,73 +146,94 @@ class Herbivore(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('monkeys.png')
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0,565)
-        self.rect.y = random.randint(0,565)
-        self.HP = 800  #startowy poziom
-        self.HP_max = 900
+       self.rect.x = random.randint(0,520)
+        self.rect.y = random.randint(60,540)
+        self.HP = 490 #startowy poziom
+        self.HP_max = 500
         self.health_bar_len = 30
         self.health_ratio = self.HP_max / self.health_bar_len
-    #teoretycznie szuka najbliższego owocu, praktycznie małpki się gromadzą sprites() robi listę z grupy,
-    def looking_for_food(self, edible_fruit):
-        edible_fruit = min([e for e in edible_fruits.sprites()],
-                            key=lambda e: pow(e.rect.x - self.rect.x, 2) + pow(e.rect.y-self.rect.y,2))
-        if self.rect.y - edible_fruit.y < 0:
-            self.rect.y += 20
-            if self.rect.y >= 530:
-                self.rect.y = 530
-        else:
-            self.rect.y -= 20
-            if self.rect.y <= 50:
-                self.rect.y = 50
-        if self.rect.x - edible_fruit.x < 0:
-            self.rect.x += 20
-            if self.rect.x >=520:
-                self.rect.y = 520
-        else:
-            self.rect.x -= 20
-            if self.rect.x <= 0:
-                self.rect.x = 0
     def update(self):
         player.update()
-        self.looking_for_food(edible_fruit)
-        self.HP -= 5
-        if self.HP <= 0:
-            self.kill()
+        self.directionsy = ['up', 'down']
+        self.directionsx = ['left','right']
+        directiony = random.choice(self.directionsy)
+        if directiony == "up":
+            self.rect.y -= 10
+            self.HP -= 0.25
+            if self.HP <= 0:
+                self.kill()
+            if self.rect.y <= 60:
+                self.rect.y = 60
+            directionx = random.choice(self.directionsx)
+            if directionx == 'left':
+                self.rect.x -= 10
+                self.HP -= 0.25
+                if self.HP <= 0:
+                    self.kill()
+                if self.rect.x <= 0:
+                    self.rect.x = 0
+            else:
+                self.rect.x += 10
+                self.HP -= 0.25
+                if self.HP <= 0:
+                    self.kill()
+                if self.rect.x >= 520:
+                    self.rect.x = 520
+        else:
+            self.rect.y += 10
+            self.HP -= 0.25
+            if self.HP <= 0:
+                self.kill()
+            if self.rect.y >= 540:
+                self.rect.y = 540
+            directionx = random.choice(self.directionsx)
+            if directionx == 'left':
+                self.rect.x -= 10
+                self.HP -= 0.25
+                if self.HP <= 0:
+                    self.kill()
+                if self.rect.x <= 0:
+                    self.rect.x = 0
+            else:
+                self.rect.x += 10
+                self.HP -= 0.25
+                if self.HP <= 0:
+                    self.kill()
+                if self.rect.x >= 520:
+                    self.rect.x = 520
         self.health_bar()
     def eat_edible_fruit(self, amount):
+        print('owocek zjedzony')
         if self.HP < self.HP_max:
             self.HP += amount
         if self.HP >= self.HP_max:
             self.HP = self.HP_max
     def eat_inedible_fruit(self, amount):
+        print('małpka została otruta')
         if self.HP > 0:
             self.HP -= amount
         if self.HP <= 0:
             self.kill()
     def health_bar(self):
-        pygame.draw.rect(screen, (255,0,0), ((self.rect.x - 5), (self.rect.y-10), self.HP/self.health_ratio, 10))
-        pygame.draw.rect(screen, (255,255,255), ((self.rect.x - 5), (self.rect.y-10), self.health_bar_len,10), 1)
+        pygame.draw.rect(screen, (24, 123, 205), ((self.rect.x + 15), (self.rect.y-10), self.HP/self.health_ratio, 10))
+        pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 15), (self.rect.y-10), self.health_bar_len,10), 1)
 ###### OWOCE ######
 #jadalny
 class E_Fruit(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.x = random.randint(0, 570)
-        self.y = random.randint(0, 570)
         self.image = pygame.image.load('fruit_1.png')
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0,575)
-        self.rect.y = random.randint(0,575)
+        self.rect.x = random.randint(0,570)
+        self.rect.y = random.randint(50,550)
 #niejadalny
 class I_Fruit(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.x = random.randint(0, 570)
-        self.y = random.randint(0, 570)
         self.image = pygame.image.load('fruit_2.png')
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0,575)
-        self.rect.y = random.randint(0,575)
+        self.rect.x = random.randint(0,570)
+        self.rect.y = random.randint(50,550)
 
 NUM_CARNIVORE = 4
 carnivores = []
