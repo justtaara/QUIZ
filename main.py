@@ -26,12 +26,40 @@ def przycisk_koniec():
 def przycisk_ponownie():
     messagebox.showinfo("Ups!","Niestety, w życiu nie ma drugich szans!")
 
+#okienko kiedy koniec gry nastąpi przez śmierć gracza
+def koniec_gry_smierc(self):
+    glowne_okno=Tk()
+    glowne_okno.title("Koniec gry!")
+    glowne_okno.geometry("250x250")
+    text = Text(glowne_okno)
+    text.insert(INSERT,"Przegrana!                       Niestety, nie masz już HP!")
+    text.insert(END, "           Twoja punktacja: " + str(score_value))
+    text.pack()
+    przycisk1=Button(glowne_okno, text = "Zakończ", command = przycisk_koniec)
+    przycisk1.place(x=30, y= 200)
+    przycisk2=Button(glowne_okno, text = "Zagraj ponownie", command = przycisk_ponownie)
+    przycisk2.place(x=120, y= 200)
+    glowne_okno.mainloop()
+
+def koniec_gry_wygrana(self):
+    glowne_okno=Tk()
+    glowne_okno.title("Koniec gry!")
+    glowne_okno.geometry("250x250")
+    text = Text(glowne_okno)
+    text.insert(INSERT,"Wygrana!                       Wyeliminowano wszystkich wrogów!")
+    text.insert(END, "           Twoja punktacja: " + str(score_value))
+    text.pack()
+    przycisk1=Button(glowne_okno, text = "Zakończ", command = przycisk_koniec)
+    przycisk1.place(x=30, y= 200)
+    przycisk2=Button(glowne_okno, text = "Zagraj ponownie", command = przycisk_ponownie)
+    przycisk2.place(x=120, y= 200)
+    glowne_okno.mainloop()
 #########CZAS##########
 
 # Emit an event every second
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 font = pygame.font.SysFont('Consolas', 30)
-secs_left = 90
+secs_left = 60
 
 def update_timer():
     "Show the timer in the top-right corner"
@@ -40,16 +68,16 @@ def update_timer():
     rendered_text = font.render(text, True, color_white)
     position = (530, 10)  # decided by trial and error
     screen.blit(rendered_text, position)
-    
+
 # punkty gracza
-score_value = 0                                                                         
+score_value = 0
 fonts = pygame.font.SysFont('Consolas', 25)
 
 def show_score():
     score = fonts.render("score:" + str(score_value) , True, (255, 255, 255))
     position_score = (70, 13)
     screen.blit(score, position_score)
-    
+
 # muzyka w tle :)
 pygame.mixer.music.load('lamusica.wav') #darmowa muzyka, pobrana z www.dl-sounds.com
 pygame.mixer.music.play(-1, 0.0)
@@ -88,21 +116,25 @@ class Player(pygame.sprite.Sprite):
                     self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
+                        koniec_gry_smierc(self)
                 elif event.key == pygame.K_RIGHT or event.key == ord('d'):
                     self.mov_X = speed
                     self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
+                        koniec_gry_smierc(self)
                 elif event.key == pygame.K_UP or event.key == ord('w'):
                     self.mov_Y = -speed
                     self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
+                        koniec_gry_smierc(self)
                 elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     self.mov_Y = speed
                     self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
+                        koniec_gry_smierc(self)
 #działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
             if event.type == KEYUP:
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
@@ -322,6 +354,19 @@ while running:
     if pygame.sprite.spritecollide(player, herbivores, True):
         player.HP_up()
         score_value += 10
+    if pygame.sprite.spritecollide(player, edible_fruits, True):
+        player.HP_up()
+        score_value += 1
+    if pygame.sprite.spritecollide(player, inedible_fruits, True):
+        player.HP_down()
+        score_value -= 1
+
+    update_timer()
+    show_score()
+#koniec pętli
+    pygame.display.flip()
+    clock.tick(60)
+pygame.quit()
     if pygame.sprite.spritecollide(player, edible_fruits, True):
         player.HP_up()
         score_value += 1
