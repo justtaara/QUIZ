@@ -116,24 +116,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.mov_X
             self.rect.y += self.mov_Y
 
-    def eat_herbivore(player, herbivores):
-        eat = pygame.sprite.collide_rect(player, herbivores)
-        if eat == True:
-            print("roślinożerca namierzony")
-            # self.HP_Player += 100
-
-    def eat_fruit(player, edible_fruits):
-        eat2 = pygame.sprite.collide_rect(player, edible_fruits)
-        if eat2 == True:
-            print("jedzenie namierzone")
-            # self.HP_Player += 20
-
-    def eat_bad_fruit(player, inedible_fruits):
-        eat3 = pygame.sprite.collide_rect(player, inedible_fruits)
-        if eat3 == True:
-            print("trucizna namierzona")
-            # self.HP_Player -= 20
-
     def health_bar(self):
         pygame.draw.rect(screen, (102,255,000), ((self.rect.x + 10), (self.rect.y-10), self.HP_Player/self.health_ratio, 10))
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 10), (self.rect.y-10), self.health_bar_len,10), 1)
@@ -146,7 +128,7 @@ class Herbivore(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('monkeys.png')
         self.rect = self.image.get_rect()
-       self.rect.x = random.randint(0,520)
+        self.rect.x = random.randint(0,520)
         self.rect.y = random.randint(60,540)
         self.HP = 490 #startowy poziom
         self.HP_max = 500
@@ -315,9 +297,16 @@ while running:
         carnivore.appear(screen)
 
 #gracz - funkcje jedzenia
-    player.eat_herbivore(herbivore)
-    player.eat_fruit(edible_fruit)
-    player.eat_bad_fruit(inedible_fruit)
+    if pygame.sprite.spritecollide(player, herbivores, True):
+        pass
+    if pygame.sprite.spritecollide(player, edible_fruits, True):
+        pass
+    if pygame.sprite.spritecollide(player, inedible_fruits, True):
+        pass
+
+
+    # player.eat_fruit(edible_fruit)
+    # player.eat_bad_fruit(inedible_fruit)
 
     update_timer()
 #koniec pętli
