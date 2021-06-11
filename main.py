@@ -79,8 +79,8 @@ def show_score():
     screen.blit(score, position_score)
 
 # muzyka w tle :)
-pygame.mixer.music.load('lamusica.wav') #darmowa muzyka, pobrana z www.dl-sounds.com
-pygame.mixer.music.play(-1, 0.0)
+# pygame.mixer.music.load('lamusica.wav') #darmowa muzyka, pobrana z www.dl-sounds.com
+# pygame.mixer.music.play(-1, 0.0)
 
 # zegar gry
 clock = pygame.time.Clock()
@@ -170,6 +170,8 @@ class Player(pygame.sprite.Sprite):
 
     def HP_up(self):
         self.HP_Player += 50
+        if self.HP_Player >= self.HP_Player_Max:
+            self.HP_Player = self.HP_Player_Max
     def HP_down(self):
         self.HP_Player -= 100
 
@@ -354,19 +356,6 @@ while running:
     if pygame.sprite.spritecollide(player, herbivores, True):
         player.HP_up()
         score_value += 10
-    if pygame.sprite.spritecollide(player, edible_fruits, True):
-        player.HP_up()
-        score_value += 1
-    if pygame.sprite.spritecollide(player, inedible_fruits, True):
-        player.HP_down()
-        score_value -= 1
-
-    update_timer()
-    show_score()
-#koniec pętli
-    pygame.display.flip()
-    clock.tick(60)
-pygame.quit()
     if pygame.sprite.spritecollide(player, edible_fruits, True):
         player.HP_up()
         score_value += 1
