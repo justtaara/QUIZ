@@ -322,10 +322,6 @@ class I_Fruit(pygame.sprite.Sprite):
         self.rect.x = random.randint(0,570)
         self.rect.y = random.randint(50,550)
 
-NUM_CARNIVORE = 4
-carnivores = []
-for i in range(NUM_CARNIVORE):
-    carnivores.append(Carnivore())
 
 player.update()
 our_sprites = pygame.sprite.Group() #sprite obsługuje wszystkie poruszające się obiekty w grze #do our_sprites wrzucamy wszystkie poruszające się elementy w grze
