@@ -69,22 +69,22 @@ class Player(pygame.sprite.Sprite):
 #działanie strzałek lub awsd - przyciskanie: (ruch gracza)
                 if event.key == pygame.K_LEFT or event.key == ord('a'):
                     self.mov_X = - speed
-                    self.HP_Player -= 1
+                    self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
                 elif event.key == pygame.K_RIGHT or event.key == ord('d'):
                     self.mov_X = speed
-                    self.HP_Player -= 1
+                    self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
                 elif event.key == pygame.K_UP or event.key == ord('w'):
                     self.mov_Y = -speed
-                    self.HP_Player -= 1
+                    self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
                 elif event.key == pygame.K_DOWN or event.key == ord('s'):
                     self.mov_Y = speed
-                    self.HP_Player -= 1
+                    self.HP_Player -= 5
                     if self.HP_Player <= 0:
                         self.kill()
 #działanie strzałek lub awsd - odciśnięcie: (ruch gracza stop)
@@ -119,6 +119,11 @@ class Player(pygame.sprite.Sprite):
     def health_bar(self):
         pygame.draw.rect(screen, (102,255,000), ((self.rect.x + 10), (self.rect.y-10), self.HP_Player/self.health_ratio, 10))
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 10), (self.rect.y-10), self.health_bar_len,10), 1)
+
+    def HP_up(self):
+        self.HP_Player += 50
+    def HP_down(self):
+        self.HP_Player -= 100
 
 player = Player()
 
@@ -246,6 +251,7 @@ for _ in range(10):
 #trwanie gry - dopóki gracz jej nie wyłączy, wszystko musi być w pętli!
 running = True
 while running:
+    score = 0
 #okienko pojawiające się, kiedy kończy się czas
     if secs_left == 0:
         glowne_okno=Tk()
@@ -298,15 +304,11 @@ while running:
 
 #gracz - funkcje jedzenia
     if pygame.sprite.spritecollide(player, herbivores, True):
-        pass
+        player.HP_up()
     if pygame.sprite.spritecollide(player, edible_fruits, True):
-        pass
+        player.HP_up()
     if pygame.sprite.spritecollide(player, inedible_fruits, True):
-        pass
-
-
-    # player.eat_fruit(edible_fruit)
-    # player.eat_bad_fruit(inedible_fruit)
+        player.HP_down()
 
     update_timer()
 #koniec pętli
