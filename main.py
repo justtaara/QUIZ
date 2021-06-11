@@ -40,6 +40,22 @@ def update_timer():
     rendered_text = font.render(text, True, color_white)
     position = (530, 10)  # decided by trial and error
     screen.blit(rendered_text, position)
+    
+# punkty gracza
+score_value = 0                                                                         
+fonts = pygame.font.SysFont('Consolas', 25)
+
+def show_score():
+    score = fonts.render("score:" + str(score_value) , True, (255, 255, 255))
+    position_score = (70, 13)
+    screen.blit(score, position_score)
+    
+# muzyka w tle :)
+pygame.mixer.music.load('lamusica.wav') #darmowa muzyka, pobrana z www.dl-sounds.com
+pygame.mixer.music.play(-1, 0.0)
+
+# zegar gry
+clock = pygame.time.Clock()
 
 #gracz chodzi kiedy trzyma się klawisz
 pygame.key.set_repeat(2,3)
@@ -259,7 +275,7 @@ while running:
         glowne_okno.geometry("250x250")
         text = Text(glowne_okno)
         text.insert(INSERT, "Czas minął, dziękujemy za grę!")
-        text.insert(END, "        Twoja punktacja:")
+        text.insert(END, "        Twoja punktacja:" + str(score_value))
         text.pack()
         przycisk1=Button(glowne_okno, text = "Zakończ", command = przycisk_koniec)
         przycisk1.place(x=30, y= 200)
@@ -305,12 +321,17 @@ while running:
 #gracz - funkcje jedzenia
     if pygame.sprite.spritecollide(player, herbivores, True):
         player.HP_up()
+        score_value += 10
     if pygame.sprite.spritecollide(player, edible_fruits, True):
         player.HP_up()
+        score_value += 1
     if pygame.sprite.spritecollide(player, inedible_fruits, True):
         player.HP_down()
+        score_value -= 1
 
     update_timer()
+    show_score()
 #koniec pętli
     pygame.display.flip()
+    clock.tick(60)
 pygame.quit()
