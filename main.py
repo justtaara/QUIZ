@@ -79,8 +79,8 @@ def show_score():
     screen.blit(score, position_score)
 
 # muzyka w tle :)
-# pygame.mixer.music.load('lamusica.wav') #darmowa muzyka, pobrana z www.dl-sounds.com
-# pygame.mixer.music.play(-1, 0.0)
+pygame.mixer.music.load('lamusica.wav') #darmowa muzyka, pobrana z www.dl-sounds.com
+pygame.mixer.music.play(-1, 0.0)
 
 # zegar gry
 clock = pygame.time.Clock()
