@@ -276,6 +276,9 @@ class Carnivore(pygame.sprite.Sprite):
 
         self.health_bar()
 
+    def eat(self, hp):
+        self.HP += hp
+        self.HP = min(self.HP, self.HP_max)
 
     def move_randomly(self):
         directionsy = ['up', 'down']
@@ -407,6 +410,18 @@ while running:
             poison = I_Fruit()
             our_sprites.add(poison)
             inedible_fruits.add(poison)
+
+    eating_animals = pygame.sprite.groupcollide(carnivores, herbivores, False, True)
+
+    # carnivores eat only herbivores, they don't eat fruits
+    # If two carnivores eat the same herbivore at the same time, they both get full HP boost
+    for carnivore, eaten_herbivores in eating_animals.items():
+        # carnivore is a Carnivore
+        # eaten_herbivores is a List of Herbivores
+        HP_per_animal = 200
+        num_eaten = len(eaten_herbivores)
+        print("Carnivore ate", num_eaten, "herbivores")
+        carnivore.eat(num_eaten * HP_per_animal)
 
     our_sprites.draw(screen)
 
