@@ -93,9 +93,9 @@ class HelpButton:
                     self.show_help()
 
     def show_help(self):
-        help_msg = "Eat monkeys to get HP and score\n" \
-            "Avoid inedible fruits\n" \
-            "You can also eat edible fruits"
+        help_msg = "Zjedz małpki żeby zdobywać punkty \n" \
+            "Unikaj trujących owoców\n" \
+            "Możesz dobywać punty jedząc jadalne owoce"
 
         window = Tk()
         window.title("Help")
@@ -343,7 +343,7 @@ class Carnivore(pygame.sprite.Sprite):
                 self.rect.x = 520
 
     def health_bar(self):
-        pygame.draw.rect(screen, (24, 123, 205), ((self.rect.x + 15), (self.rect.y-10), self.HP/self.health_ratio, 10))
+        pygame.draw.rect(screen, (255, 128, 0), ((self.rect.x + 15), (self.rect.y-10), self.HP/self.health_ratio, 10))
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 15), (self.rect.y-10), self.health_bar_len,10), 1)
 
 ###### OWOCE ######
