@@ -71,14 +71,13 @@ def update_timer():
 # Game manual
 
 class HelpButton:
-    def __init__(self, pos, bg="black"):
+    def __init__(self, pos):
         text = "help"
         self.x, self.y = pos
 
         self.text = font.render(text, 1, pygame.Color("White"))
         self.size = self.text.get_size()
         self.surface = pygame.Surface(self.size)
-        self.surface.fill(bg)
         self.surface.blit(self.text, (0, 0))
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
 
@@ -395,7 +394,7 @@ for _ in range(10):
     our_sprites.add(herbivore)
     herbivores.add(herbivore)
 
-NUM_CARNIVORES = 5
+NUM_CARNIVORES = 3
 for _ in range(NUM_CARNIVORES):
     carnivore = Carnivore()
     our_sprites.add(carnivore)
