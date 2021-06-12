@@ -227,6 +227,7 @@ class Herbivore(pygame.sprite.Sprite):
         self.HP_max = 500
         self.health_bar_len = 30
         self.health_ratio = self.HP_max / self.health_bar_len
+        
     def update(self):
         player.update()
         self.directionsy = ['up', 'down']
@@ -277,18 +278,19 @@ class Herbivore(pygame.sprite.Sprite):
                 if self.rect.x >= 520:
                     self.rect.x = 520
         self.health_bar()
+        
     def eat_edible_fruit(self, amount):
-        print('owocek zjedzony')
         if self.HP < self.HP_max:
             self.HP += amount
         if self.HP >= self.HP_max:
             self.HP = self.HP_max
+            
     def eat_inedible_fruit(self, amount):
-        print('małpka została otruta')
         if self.HP > 0:
             self.HP -= amount
         if self.HP <= 0:
             self.kill()
+           
     def health_bar(self):
         pygame.draw.rect(screen, (24, 123, 205), ((self.rect.x + 15), (self.rect.y-10), self.HP/self.health_ratio, 10))
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 15), (self.rect.y-10), self.health_bar_len,10), 1)
@@ -440,6 +442,7 @@ while running:
             fruit = E_Fruit()
             our_sprites.add(fruit)
             edible_fruits.add(fruit)
+            
     for herbivore in herbivores.sprites():
         poisoning = pygame.sprite.groupcollide(herbivores,
                                                 inedible_fruits,
