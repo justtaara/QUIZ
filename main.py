@@ -387,19 +387,26 @@ while running:
     #sprawdzanie czy nie doszło do kolizji
     #jeśli doszło to owoc pojawia się gdzieś indziej
    #groupcollide() przechowuje wyrzucone z planszy elementy i można je ponownie przywołac
-    eating = pygame.sprite.groupcollide(herbivores, edible_fruits, False, True)
-    herbivore.eat_edible_fruit(100)
-
-    for i in eating:
-        fruit = E_Fruit()
-        our_sprites.add(fruit)
-        edible_fruits.add(fruit)
-    poisioning = pygame.sprite.groupcollide(herbivores, inedible_fruits, False, True)
-    herbivore.eat_inedible_fruit(150)
-    for _ in poisioning:
-        poison = I_Fruit()
-        our_sprites.add(poison)
-        inedible_fruits.add(poison)
+    for herbivore in herbivores.sprites():
+        eating = pygame.sprite.groupcollide(herbivores,
+                                            edible_fruits,
+                                            False,
+                                            True)
+        herbivore.eat_edible_fruit(100)
+        for _ in eating:
+            fruit = E_Fruit()
+            our_sprites.add(fruit)
+            edible_fruits.add(fruit)
+    for herbivore in herbivores.sprites():
+        poisoning = pygame.sprite.groupcollide(herbivores,
+                                                inedible_fruits,
+                                                False,
+                                                True)
+        herbivore.eat_inedible_fruit(100)
+        for _ in poisoning:
+            poison = I_Fruit()
+            our_sprites.add(poison)
+            inedible_fruits.add(poison)
 
     our_sprites.draw(screen)
 
