@@ -106,6 +106,7 @@ class HelpButton:
         window.mainloop()
 
 help_button = HelpButton(pos = (300, 10))
+help_button.show_help()
 
 # punkty gracza
 score_value = 0
@@ -227,7 +228,7 @@ class Herbivore(pygame.sprite.Sprite):
         self.HP_max = 500
         self.health_bar_len = 30
         self.health_ratio = self.HP_max / self.health_bar_len
-        
+
     def update(self):
         player.update()
         self.directionsy = ['up', 'down']
@@ -278,19 +279,19 @@ class Herbivore(pygame.sprite.Sprite):
                 if self.rect.x >= 520:
                     self.rect.x = 520
         self.health_bar()
-        
+
     def eat_edible_fruit(self, amount):
         if self.HP < self.HP_max:
             self.HP += amount
         if self.HP >= self.HP_max:
             self.HP = self.HP_max
-            
+
     def eat_inedible_fruit(self, amount):
         if self.HP > 0:
             self.HP -= amount
         if self.HP <= 0:
             self.kill()
-           
+
     def health_bar(self):
         pygame.draw.rect(screen, (24, 123, 205), ((self.rect.x + 15), (self.rect.y-10), self.HP/self.health_ratio, 10))
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 15), (self.rect.y-10), self.health_bar_len,10), 1)
@@ -428,7 +429,6 @@ while running:
     our_sprites.update()
     help_button.show()
     player.update()
-    time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji
     #jeśli doszło to owoc pojawia się gdzieś indziej
    #groupcollide() przechowuje wyrzucone z planszy elementy i można je ponownie przywołac
@@ -442,7 +442,7 @@ while running:
             fruit = E_Fruit()
             our_sprites.add(fruit)
             edible_fruits.add(fruit)
-            
+
     for herbivore in herbivores.sprites():
         poisoning = pygame.sprite.groupcollide(herbivores,
                                                 inedible_fruits,
@@ -481,7 +481,8 @@ while running:
 
     update_timer()
     show_score()
-#koniec pętli
+
     pygame.display.flip()
-    clock.tick(60)
+    # tylko 8 klatek na sekundę, żeby roślinożercy i mięsożercy nie byli rozedrgani
+    clock.tick(8)
 pygame.quit()
