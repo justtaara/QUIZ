@@ -68,6 +68,45 @@ def update_timer():
     position = (530, 10)  # decided by trial and error
     screen.blit(rendered_text, position)
 
+# Game manual
+
+class HelpButton:
+    def __init__(self, pos, bg="black"):
+        text = "help"
+        self.x, self.y = pos
+
+        self.text = font.render(text, 1, pygame.Color("White"))
+        self.size = self.text.get_size()
+        self.surface = pygame.Surface(self.size)
+        self.surface.fill(bg)
+        self.surface.blit(self.text, (0, 0))
+        self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
+
+    def show(self):
+        screen.blit(self.surface, (self.x, self.y))
+
+    def handle_click(self, event):
+        x, y = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.mouse.get_pressed()[0]:
+                if self.rect.collidepoint(x, y):
+                    self.show_help()
+
+    def show_help(self):
+        help_msg = "Eat monkeys to get HP and score\n" \
+            "Avoid inedible fruits\n" \
+            "You can also eat edible fruits"
+
+        window = Tk()
+        window.title("Help")
+        window.geometry("800x600")
+        text = Text(window)
+        text.insert(INSERT,help_msg)
+        text.pack()
+        window.mainloop()
+
+help_button = HelpButton(pos = (300, 10))
+
 # punkty gracza
 score_value = 0
 fonts = pygame.font.SysFont('Consolas', 25)
@@ -354,7 +393,6 @@ for _ in range(NUM_CARNIVORES):
     our_sprites.add(carnivore)
     carnivores.add(carnivore)
 
-
 #trwanie gry - dopóki gracz jej nie wyłączy, wszystko musi być w pętli!
 running = True
 while running:
@@ -381,10 +419,12 @@ while running:
                 running = False
         if event.type == pygame.USEREVENT:
             secs_left -= 1
+        help_button.handle_click(event)
 
 #update - tło dżungla
     screen.blit(jungle_map , (0,0))
     our_sprites.update()
+    help_button.show()
     player.update()
     time.sleep(0.2) #opóźnia update, dzięki czemu roślinożercy nie są rozedrgani
     #sprawdzanie czy nie doszło do kolizji
