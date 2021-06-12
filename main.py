@@ -141,7 +141,7 @@ class Player(pygame.sprite.Sprite):
         self.health_bar_len = 30
         self.health_ratio = self.HP_Player_Max / self.health_bar_len
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('jaguar_main.png')
+        self.image = pygame.image.load('jaguar_main_2.png')
         self.rect = self.image.get_rect()
         self.rect.center = (self.rect.x, self.rect.y)
         self.rect.x = 300
@@ -224,7 +224,7 @@ player = Player()
 class Herbivore(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('monkeys.png')
+        self.image = pygame.image.load('monkeys_2.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,520)
         self.rect.y = random.randint(60,540)
@@ -301,7 +301,7 @@ class Herbivore(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 15), (self.rect.y-10), self.health_bar_len,10), 1)
 
 class Carnivore(pygame.sprite.Sprite):
-    animal_image = 'jaguar_angry.png'
+    animal_image = 'jaguar_angry_2.png'
     HP_per_turn = 0.25
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -358,7 +358,7 @@ class Carnivore(pygame.sprite.Sprite):
 class E_Fruit(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('fruit_1.png')
+        self.image = pygame.image.load('fruit_1_2.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,570)
         self.rect.y = random.randint(50,550)
@@ -366,7 +366,7 @@ class E_Fruit(pygame.sprite.Sprite):
 class I_Fruit(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('fruit_2.png')
+        self.image = pygame.image.load('fruit_2_2.png')
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0,570)
         self.rect.y = random.randint(50,550)
