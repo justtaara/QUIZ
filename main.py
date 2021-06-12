@@ -14,7 +14,7 @@ screen = pygame.display.set_mode([screen_width,screen_height])
 
 #Nazwa gry i ikonka
 pygame.display.set_caption("Welcome to the jungle")
-icon = pygame.image.load("logo.png") #ikona z flaticon.com, Freepik!
+icon = pygame.image.load("palma_mala.png") #ikona z flaticon.com, Freepik!
 pygame.display.set_icon(icon)
 #tło gry/mapka dodanie obrazka
 jungle_map = pygame.image.load("mapjungle.png")
@@ -93,9 +93,14 @@ class HelpButton:
                     self.show_help()
 
     def show_help(self):
-        help_msg = "Zjedz małpki żeby zdobywać punkty \n" \
-            "Unikaj trujących owoców\n" \
-            "Możesz dobywać punty jedząc jadalne owoce"
+        help_msg = "Witaj w Dżungli! \n\n" \
+            "Aby zaspokoić głód, wykaż się szybkością i sprytem.\n\n" \
+            "Poluj na małpy - za każdą dostaniesz 10 punktów!. \n\n"\
+            "Różowe owoce nasycą Cię na chwilę, są warte 1 punkt.\n\n" \
+            "Uważaj na żółte owoce, są szkodliwe! Jedząc je stracisz zdrowie i"\
+            " punkty!\n\nPamiętaj, nie jesteś tutaj jedynym drapieżnikiem.\n\n"\
+            "Rywalizuj z innymi przedstawiecielami gatunku o pożywienie!\n\n\n"\
+            "Niech żyje prawo dżungli! Auuuu"
 
         window = Tk()
         window.title("Help")
@@ -423,7 +428,20 @@ while running:
         if event.type == pygame.USEREVENT:
             secs_left -= 1
         help_button.handle_click(event)
-
+    if len(herbivores.sprites()) <= 0:
+        glowne_okno=Tk()
+        glowne_okno.title("Koniec gry!")
+        glowne_okno.geometry("270x270")
+        text = Text(glowne_okno)
+        text.insert(INSERT,"Wyeliminowano wszystkie małpy!\n\n")
+        text.insert(END, "Twoja punktacja: " + str(score_value))
+        text.pack()
+        przycisk1=Button(glowne_okno, text = "Zakończ", command = przycisk_koniec)
+        przycisk1.place(x=30, y= 220)
+        przycisk2=Button(glowne_okno, text = "Zagraj ponownie", command = przycisk_ponownie)
+        przycisk2.place(x=120, y= 220)
+        glowne_okno.mainloop()
+        
 #update - tło dżungla
     screen.blit(jungle_map , (0,0))
     our_sprites.update()
