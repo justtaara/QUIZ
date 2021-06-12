@@ -106,6 +106,7 @@ class HelpButton:
         window.geometry("800x600")
         text = Text(window)
         text.insert(INSERT,help_msg)
+        text.config(state=DISABLED)
         text.pack()
         window.mainloop()
 
