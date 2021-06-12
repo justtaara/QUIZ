@@ -94,7 +94,7 @@ class HelpButton:
     def show_help(self):
         help_msg = "Witaj w Dżungli! \n\n" \
             "Aby zaspokoić głód, wykaż się szybkością i sprytem.\n\n" \
-            "Poluj na małpy - za każdą dostaniesz 10 punktów!. \n\n"\
+            "Poluj na małpy - za każdą dostaniesz 10 punktów! \n\n"\
             "Różowe owoce nasycą Cię na chwilę, są warte 1 punkt.\n\n" \
             "Uważaj na żółte owoce, są szkodliwe! Jedząc je stracisz zdrowie i"\
             " punkty!\n\nPamiętaj, nie jesteś tutaj jedynym drapieżnikiem.\n\n"\
@@ -191,14 +191,14 @@ class Player(pygame.sprite.Sprite):
                     self.mov_Y = 0
 
         #gracz nie wchodzi w ściany
-        if self.rect.y <= 50:
-            self.rect.y = 50
-        if self.rect.y >=575:
-            self.rect.y = 575
+        if self.rect.y <= 60:
+            self.rect.y = 60
+        if self.rect.y >=550:
+            self.rect.y = 550
         if self.rect.x <= 0:
             self.rect.x = 0
-        if self.rect.x >= 575:
-            self.rect.x = 575
+        if self.rect.x >= 550:
+            self.rect.x = 550
 
         #health bar gracza
         self.health_bar()
@@ -209,8 +209,8 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.mov_Y
 
     def health_bar(self):
-        pygame.draw.rect(screen, (102,255,000), ((self.rect.x + 10), (self.rect.y-10), self.HP_Player/self.health_ratio, 10))
-        pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 10), (self.rect.y-10), self.health_bar_len,10), 1)
+        pygame.draw.rect(screen, (102,255,000), ((self.rect.x + 5), (self.rect.y-10), self.HP_Player/self.health_ratio, 5))
+        pygame.draw.rect(screen, (000,000,000), ((self.rect.x + 5), (self.rect.y-10), self.health_bar_len,5), 1)
 
     def HP_up(self):
         self.HP_Player += 50
@@ -227,8 +227,8 @@ class Herbivore(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('monkeys_2.png')
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0,520)
-        self.rect.y = random.randint(60,540)
+        self.rect.x = random.randint(0,560)
+        self.rect.y = random.randint(60,570)
         self.HP = 490 #startowy poziom
         self.HP_max = 500
         self.health_bar_len = 30
@@ -259,15 +259,15 @@ class Herbivore(pygame.sprite.Sprite):
                 self.HP -= 0.25
                 if self.HP <= 0:
                     self.kill()
-                if self.rect.x >= 520:
-                    self.rect.x = 520
+                if self.rect.x >= 560:
+                    self.rect.x = 560
         else:
             self.rect.y += 10
             self.HP -= 0.25
             if self.HP <= 0:
                 self.kill()
-            if self.rect.y >= 540:
-                self.rect.y = 540
+            if self.rect.y >= 570:
+                self.rect.y = 570
             directionx = random.choice(self.directionsx)
             if directionx == 'left':
                 self.rect.x -= 10
@@ -298,8 +298,8 @@ class Herbivore(pygame.sprite.Sprite):
             self.kill()
 
     def health_bar(self):
-        pygame.draw.rect(screen, (24, 123, 205), ((self.rect.x + 15), (self.rect.y-10), self.HP/self.health_ratio, 10))
-        pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 15), (self.rect.y-10), self.health_bar_len,10), 1)
+        pygame.draw.rect(screen, (24, 123, 205), ((self.rect.x + 5), (self.rect.y-10), self.HP/self.health_ratio, 5))
+        pygame.draw.rect(screen, (000,000,000), ((self.rect.x + 5), (self.rect.y-10), self.health_bar_len,5), 1)
 
 class Carnivore(pygame.sprite.Sprite):
     animal_image = 'jaguar_angry_2.png'
@@ -308,8 +308,8 @@ class Carnivore(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(self.animal_image)
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0,520)
-        self.rect.y = random.randint(60,540)
+        self.rect.x = random.randint(0,560)
+        self.rect.y = random.randint(60,570)
         self.HP = 490 #startowy poziom
         self.HP_max = 500
         self.health_bar_len = 30
@@ -338,8 +338,8 @@ class Carnivore(pygame.sprite.Sprite):
                 self.rect.y = 60
         else:
             self.rect.y += 10
-            if self.rect.y >= 540:
-                self.rect.y = 540
+            if self.rect.y >= 560:
+                self.rect.y = 560
 
         if directionx == 'left':
             self.rect.x -= 10
@@ -347,12 +347,12 @@ class Carnivore(pygame.sprite.Sprite):
                 self.rect.x = 0
         else:
             self.rect.x += 10
-            if self.rect.x >= 520:
-                self.rect.x = 520
+            if self.rect.x >= 570:
+                self.rect.x = 570
 
     def health_bar(self):
-        pygame.draw.rect(screen, (255, 128, 0), ((self.rect.x + 15), (self.rect.y-10), self.HP/self.health_ratio, 10))
-        pygame.draw.rect(screen, (255,255,255), ((self.rect.x + 15), (self.rect.y-10), self.health_bar_len,10), 1)
+        pygame.draw.rect(screen, (255, 128, 0), ((self.rect.x + 5), (self.rect.y-10), self.HP/self.health_ratio, 5))
+        pygame.draw.rect(screen, (000,000,000), ((self.rect.x + 5), (self.rect.y-10), self.health_bar_len,5), 1)
 
 ###### OWOCE ######
 #jadalny
@@ -390,12 +390,12 @@ for _ in range(25):
     edible_fruit = E_Fruit()
     our_sprites.add(edible_fruit)
     edible_fruits.add(edible_fruit)
-for _ in range(10):
+for _ in range(15):
     herbivore = Herbivore()
     our_sprites.add(herbivore)
     herbivores.add(herbivore)
 
-NUM_CARNIVORES = 3
+NUM_CARNIVORES = 4
 for _ in range(NUM_CARNIVORES):
     carnivore = Carnivore()
     our_sprites.add(carnivore)
